@@ -50,7 +50,7 @@
       max-width: 1280px;
       margin: 0 auto;
       padding: 0 2rem;
-      height: 90px;
+      height: 120px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -59,7 +59,7 @@
     .nav-logo-wrap { display: flex; align-items: center; text-decoration: none; }
 
     .nav-logo-wrap img {
-      height: 72px;
+      height: 108px;
       width: auto;
       mix-blend-mode: multiply;
     }
@@ -109,7 +109,7 @@
       .nav-links {
         display: none;
         position: absolute;
-        top: 90px; left: 0; right: 0;
+        top: 120px; left: 0; right: 0;
         background: #fff;
         flex-direction: column;
         padding: 1.5rem 2rem 2rem;
@@ -158,12 +158,38 @@
       width: 100%;
     }
 
+    .hero-logo-wrap {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 2rem;
+    }
+
+    .hero-logo-wrap::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 160%;
+      height: 160%;
+      border-radius: 50%;
+      background: radial-gradient(ellipse at center,
+        rgba(255,255,255,0.38) 0%,
+        rgba(255,255,255,0.22) 30%,
+        rgba(255,255,255,0.08) 55%,
+        transparent 72%
+      );
+      pointer-events: none;
+    }
+
     .hero-logo {
       width: 280px;
       height: auto;
       mix-blend-mode: screen;
-      filter: drop-shadow(0 0 36px rgba(255,255,255,0.45)) drop-shadow(0 0 80px rgba(255,255,255,0.2)) brightness(1.2) saturate(0.85);
-      margin-bottom: 2rem;
+      filter: brightness(1.25) saturate(0.8);
+      position: relative;
+      z-index: 1;
+      display: block;
     }
 
     .hero-tagline {
@@ -833,7 +859,7 @@
     </button>
     <ul class="nav-links" id="navLinks">
       <li><a href="#services">Services</a></li>
-      <li><a href="#gallery">Our Work</a></li>
+      <li><a href="#before-after">Our Work</a></li>
       <li><a href="#reviews">Reviews</a></li>
       <li><a href="#gallery">Gallery</a></li>
       <li><a href="#contact">Contact</a></li>
@@ -847,7 +873,9 @@
   <div class="hero-bg" id="heroBg"></div>
   <div class="hero-overlay"></div>
   <div class="hero-content">
-    <img src="images/logo.png" alt="Shady Oaks Landscapes" class="hero-logo">
+    <div class="hero-logo-wrap">
+      <img src="images/logo.png" alt="Shady Oaks Landscapes" class="hero-logo">
+    </div>
     <h1 class="hero-tagline">
       Beautiful Lawns. <em>Healthy Trees.</em><br>
       Outdoor Spaces You'll Love.
@@ -1001,6 +1029,35 @@
   </div>
 </section>
 
+
+<!-- ═══ BEFORE / AFTER ═══ -->
+<section id="before-after">
+  <div class="section-header">
+    <p class="section-eyebrow">Transformations</p>
+    <h2 class="section-title">See the Difference We Make</h2>
+    <p class="section-sub">Drag the slider to reveal the transformation — a real lawn repair from a yard right in your neighborhood.</p>
+  </div>
+  <div class="comparison-wrapper">
+    <p class="comparison-hint">← Drag to compare →</p>
+    <div class="comparison-container" id="compContainer">
+      <img class="comparison-before" src="images/before.jpg" alt="Before — bare patches and damaged lawn with brown fence">
+      <div class="comparison-after-wrap" id="afterWrap">
+        <img class="comparison-after" src="images/after.jpg" alt="After — fresh green sod installed, same brown fence">
+      </div>
+      <div class="comparison-handle" id="compHandle">
+        <div class="comparison-handle-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+            <polyline points="5 8 1 12 5 16"/>
+            <polyline points="19 8 23 12 19 16"/>
+          </svg>
+        </div>
+      </div>
+      <span class="comp-label comp-label-before">Before</span>
+      <span class="comp-label comp-label-after">After</span>
+    </div>
+  </div>
+</section>
 
 <!-- ═══ REVIEWS ═══ -->
 <section id="reviews">
@@ -1172,6 +1229,26 @@
   const heroBg = document.getElementById('heroBg');
   heroBg.style.backgroundImage = "url('images/hero.jpg')";
   requestAnimationFrame(() => heroBg.classList.add('loaded'));
+
+  // ── Before/After comparison slider ──
+  const compContainer = document.getElementById('compContainer');
+  const afterWrap     = document.getElementById('afterWrap');
+  const compHandle    = document.getElementById('compHandle');
+  let dragging = false;
+
+  function moveSlider(clientX) {
+    const rect = compContainer.getBoundingClientRect();
+    const pct  = Math.min(100, Math.max(0, ((clientX - rect.left) / rect.width) * 100));
+    afterWrap.style.clipPath = `inset(0 ${100 - pct}% 0 0)`;
+    compHandle.style.left    = pct + '%';
+  }
+
+  compContainer.addEventListener('mousedown',  e => { dragging = true; moveSlider(e.clientX); });
+  compContainer.addEventListener('touchstart', e => { dragging = true; moveSlider(e.touches[0].clientX); }, { passive: true });
+  document.addEventListener('mousemove',  e => { if (dragging) moveSlider(e.clientX); });
+  document.addEventListener('touchmove',  e => { if (dragging) moveSlider(e.touches[0].clientX); }, { passive: true });
+  document.addEventListener('mouseup',  () => dragging = false);
+  document.addEventListener('touchend', () => dragging = false);
 
   // ── Reviews auto-slider ──
   const revCards = Array.from(document.querySelectorAll('.review-card'));
