@@ -42,8 +42,6 @@
       background: #ffffff;
       box-shadow: 0 2px 24px rgba(26,61,31,0.10);
       transition: box-shadow 0.3s;
-      max-height: 80px;
-      overflow: hidden;
     }
 
     nav.scrolled { box-shadow: 0 4px 32px rgba(26,61,31,0.18); }
@@ -51,8 +49,8 @@
     .nav-inner {
       max-width: 1280px;
       margin: 0 auto;
-      padding: 0 2rem;
-      height: 80px;
+      padding: 10px 20px;
+      min-height: 100px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -111,7 +109,7 @@
       .nav-links {
         display: none;
         position: absolute;
-        top: 80px; left: 0; right: 0;
+        top: 160px; left: 0; right: 0;
         background: #fff;
         flex-direction: column;
         padding: 1.5rem 2rem 2rem;
@@ -129,7 +127,7 @@
       align-items: center;
       justify-content: center;
       overflow: hidden;
-      padding-top: 80px;
+      padding-top: 160px;
     }
 
     .hero-bg {
